@@ -1,0 +1,247 @@
+:encoding: utf-8
+:lang: es
+:toc: right
+:toc-title: Tabla de contenidos
+:doctype: book
+:imagesdir: ./images
+:source-highlighter: highlight.js
+
+////
+Nombre - Titulo
+////
+# Práctica 3: Enrutamiento Avanzado, Fusión de Datos e Integración con Google Sheets
+Tutorial básico de n8n
+Manel Mena <manel.mena@ual.es>
+
+
+// Modo no numerado de apartados
+:numbered!: 
+
+[abstract]
+== Resumen
+
+Resumen la Práctica 3
+
+.Objetivos
+
+* Gestión de Autenticación.
+* Integración con Servicios de Terceros.
+* Lógica de Enrutamiento Avanzada
+* Fusión de Flujos de Datos.
+* Diseño de Flujos de Trabajo Modulares.
+
+// Modo numerado
+:numbered:
+
+== Objetivos de la Práctica
+
+Esta tercera práctica representa un paso crucial hacia la construcción de automatizaciones de nivel profesional. Se abandonan las APIs públicas sin estado para realizar la primera integración con un servicio persistente y de uso extendido: Google Sheets. Este proceso introducirá el concepto fundamental de la gestión de credenciales. Además, se ampliarán las capacidades de lógica de negocio de los flujos de trabajo, superando la bifurcación simple del nodo `IF` para implementar enrutamientos complejos con múltiples salidas.
+
+Al finalizar esta sesión, el estudiante habrá desarrollado las siguientes competencias:
+
+* *Gestión de Autenticación:* Comprender el propósito del sistema de credenciales de n8n y configurar con éxito una credencial OAuth 2.0 para interactuar con las APIs de Google.
+* *Integración con Servicios de Terceros:* Utilizar el nodo de Google Sheets para realizar operaciones de escritura (añadir filas) en una hoja de cálculo, sentando las bases para futuras integraciones con bases de datos y otros servicios SaaS.
+* *Lógica de Enrutamiento Avanzada:* Implementar el nodo `Switch` para dirigir el flujo de datos hacia múltiples ramas de ejecución basándose en el valor de un campo, superando la limitación de dos salidas del nodo `IF`.
+* *Fusión de Flujos de Datos:* Utilizar el nodo `Merge` para recombinar múltiples ramas de ejecución en un único flujo de datos, un patrón esencial para la consolidación de resultados y la continuación de un proceso unificado.
+* *Diseño de Flujos de Trabajo Modulares:* Construir flujos de trabajo que procesan, enrutan, actúan y consolidan datos de manera estructurada, aplicando los principios de diseño de software a la automatización visual.
+
+== Fundamentos Teóricos
+
+=== Gestión de Credenciales en n8n
+
+Hasta ahora, hemos interactuado exclusivamente con APIs públicas que no requieren autenticación. Sin embargo, la gran mayoría de los servicios (Google Sheets, Slack, bases de datos, etc.) necesitan verificar la identidad y los permisos del cliente que realiza la solicitud. n8n centraliza y asegura este proceso a través de su sistema de *Credenciales*.
+
+Una credencial en n8n es un registro seguro que almacena la información de autenticación para un servicio específico (una clave de API, un token de acceso OAuth 2.0, un par de usuario/contraseña, etc.). Almacenar esta información en el gestor de credenciales en lugar de escribirla directamente en los nodos ofrece ventajas críticas:
+
+* *Seguridad:* La información sensible se cifra y se almacena de forma centralizada, en lugar de estar visible en el JSON del flujo de trabajo.
+* *Reutilización:* Una única credencial (por ejemplo, para una cuenta de Google) puede ser utilizada en docenas de flujos de trabajo y nodos diferentes. Si la credencial necesita ser actualizada, solo se cambia en un lugar.
+* *Abstracción:* El desarrollador del flujo de trabajo no necesita gestionar la complejidad de los flujos de autenticación como OAuth 2.0. Simplemente selecciona la credencial apropiada y n8n se encarga del resto.
+
+Para esta práctica, crearemos una credencial de Google usando el protocolo OAuth 2.0, que es un estándar de la industria para la autorización delegada. Esto implica un proceso único en la Consola de Google Cloud para autorizar a nuestra instancia de n8n a actuar en nuestro nombre en servicios como Google Sheets.
+
+=== Lógica de Múltiples Ramas: El Nodo `Switch`
+
+En la práctica anterior, el nodo `IF` nos permitió crear lógica condicional con dos salidas: `true` y `false`. Sin embargo, muchos problemas del mundo real requieren más de dos caminos. Por ejemplo, clasificar un ticket de soporte por prioridad (Baja, Media, Alta, Urgente) o procesar pedidos según el país de envío. Para estos escenarios, encadenar múltiples nodos `IF` sería ineficiente y difícil de leer.
+
+El nodo `Switch` es la solución de n8n para el enrutamiento de múltiples ramas. Funciona de manera similar a una declaración `switch` en lenguajes de programación. Se configura un campo de "Enrutamiento" (el valor a evaluar, por ejemplo, `{{ $json.category }}`) y luego se definen múltiples reglas de enrutamiento. Cada regla compara el valor del campo con un valor específico y, si coincide, envía el ítem a su salida correspondiente.
+
+El nodo `Switch` crea una salida numerada para cada regla (0, 1, 2,...). También proporciona una salida `default` (predeterminada) para los ítems que no coinciden con ninguna de las reglas definidas, lo que es crucial para manejar casos inesperados.
+
+=== Fusión de Flujos de Datos: El Nodo `Merge`
+
+Cuando un flujo de trabajo se divide en múltiples ramas (usando `IF` o `Switch`), a menudo es necesario volver a unir esas ramas para realizar una acción final común. Por ejemplo, después de procesar pedidos de diferentes países en ramas separadas, es posible que queramos enviar una única notificación de resumen o registrar todos los pedidos procesados en un log.
+
+El nodo `Merge` está diseñado específicamente para este propósito. Espera a que todas sus entradas conectadas hayan terminado de ejecutarse y luego combina los ítems que reciben en un único flujo de salida. El nodo `Merge` es altamente configurable y ofrece varios modos de operación para diferentes escenarios de fusión de datos:
+
+* *Append (Anexar):* Es el modo más simple. Simplemente toma todos los ítems de la primera entrada, luego todos los de la segunda, y así sucesivamente, y los coloca en un único array de salida.
+* *Combine by Position (Combinar por Posición):* Une los ítems basándose en su orden. El primer ítem de la entrada 1 se fusiona con el primer ítem de la entrada 2, el segundo con el segundo, etc.
+* *Combine by Key (Combinar por Clave):* Es el modo más potente. Fusiona ítems de dos entradas que tienen un valor coincidente en un campo clave especificado. Por ejemplo, se podrían combinar datos de clientes de un sistema con datos de pedidos de otro, usando el `customer_id` como clave de unión.
+
+Para esta práctica, utilizaremos el modo `Append` para consolidar los resultados de nuestras diferentes ramas de `Switch` antes de finalizar el flujo de trabajo.
+
+== Desarrollo del Flujo de Trabajo Guiado
+
+En este ejercicio, construiremos un flujo de trabajo que obtiene chistes de tres categorías diferentes, los clasifica usando un nodo `Switch` y escribe cada tipo de chiste en una hoja separada dentro de un único documento de Google Sheets.
+
+=== Paso 1: Preparar el Documento de Google Sheets
+
+. Vaya a `https://sheets.google.com` y cree una nueva hoja de cálculo. Póngale un nombre descriptivo, como "Clasificación de Chistes n8n".
+. Dentro de este documento, cree tres hojas (pestañas). Renómbrelas a: `Programming`, `Misc` y `Dark`.
+. En cada una de las tres hojas, añada las siguientes cabeceras en la primera fila: `ID`, `Chiste` y `Fecha de Procesamiento`.
+
+=== Paso 2: Configurar las Credenciales de Google (OAuth 2.0)
+
+Este es el paso más complejo, pero solo necesita hacerse una vez. Siga la guía oficial de n8n o un tutorial detallado para configurar las credenciales de Google OAuth. El proceso general es:
+
+. Vaya a la `https://console.cloud.google.com/`.
+. Cree un nuevo proyecto (o use uno existente).
+. Habilite la *Google Sheets API* para ese proyecto.
+
+[.thumb]
+.Google Sheets API
+image::1.png[Google Sheets API, align=center, link=""]
+
+. Vaya a "Pantalla de consentimiento de OAuth", configúrela como "Externa" y añada su propia dirección de correo electrónico como usuario de prueba.
+. Vaya a "Credenciales", haga clic en "Crear credenciales" -> "ID de cliente de OAuth".
+. Seleccione "Aplicación web" como tipo.
+. En n8n, añada un nodo de Google Sheets, haga clic en "Credential" -> "Create New". Copie la "URL de redireccionamiento de OAuth" que n8n le proporciona.
+
+[.thumb]
+.URI de redireccionamiento autorizados
+image::3.png[URI de redireccionamiento autorizados, align=center, link=""]
+
+. Pegue esa URL en el campo "URI de redireccionamiento autorizados" en la Consola de Google Cloud.
+
+[.thumb]
+.Client Credentials Google
+image::2.png[Client Credentials Google, align=center, link=""]
+
+. Cree las credenciales. Google le proporcionará un *ID de cliente* y un *Secreto de cliente*.
+. Copie y pegue estos dos valores en la ventana de creación de credenciales de n8n y guarde.
+. n8n le pedirá que inicie sesión con su cuenta de Google para autorizar la conexión.
+
+[.thumb]
+.Example Integration Google Sheets
+image::4.png[Example Integration Google Sheets, align=center, link=""]
+
+=== Paso 3: Construir el Flujo de Trabajo
+
+. *`Manual Trigger`:* Comience con un `Manual Trigger` para facilitar las pruebas.
+
+. *`HTTP Request`:*
+** Añada un nodo `HTTP Request` para obtener chistes de múltiples categorías.
+** *URL:* `https://v2.jokeapi.dev/joke/Programming,Misc,Dark?type=single&amount=10`
+** Ejecute el nodo y verifique que recibe un array de 10 chistes en el campo `jokes`.
+
+. *`Split Out`:*
+** Añada un nodo `Split Out` para procesar cada chiste individualmente.
+** *Field To Split Out:* `jokes`
+
+[.thumb]
+.Split Out
+image::5.png[Split Out, align=center, link=""]
+
+. *`Switch` Node:*
+** Añada un nodo `Switch` para enrutar los chistes.
+** *Mode:* `Rules`
+** *Routing Field:* `{{ $json.category }}`
+** *Routing Rules:*
+*** *Output 0:* `is equal to` -> `Programming`
+*** *Add Routing Rule*
+*** *Output 1:* `is equal to` -> `Misc`
+*** *Add Routing Rule*
+*** *Output 2:* `is equal to` -> `Dark`
+** Ejecute el nodo y verifique que los ítems se distribuyen correctamente entre las salidas 0, 1 y 2.
+
+[.thumb]
+.Switch Node
+image::6.png[Switch Node, align=center, link=""]
+
+. *Nodos `Google Sheets`:*
+** Ahora, conecte un nodo `Google Sheets` a cada una de las tres salidas del `Switch`.
+** *Para la Salida 0 (Programming):*
+*** *Credential:* Seleccione la credencial de Google que creó.
+*** *Operation:* `Append Row`
+*** *Document:* Seleccione su hoja de cálculo "Clasificación de Chistes n8n".
+*** *Sheet:* Seleccione la hoja `Programming`.
+*** *Columns:*
+**** `ID`: `{{ $json.id }}`
+**** `Chiste`: `{{ $json.joke }}`
+**** `Fecha de Procesamiento`: `{{ $now }}` (variable global de n8n que devuelve la fecha y hora actuales).
+** *Para la Salida 1 (Misc):*
+*** Copie el nodo anterior y conéctelo a la salida 1.
+*** Modifique solo el parámetro *Sheet* para que apunte a la hoja `Misc`.
+** *Para la Salida 2 (Dark):*
+*** Copie el nodo de nuevo y conéctelo a la salida 2.
+*** Modifique el parámetro *Sheet* para que apunte a la hoja `Dark`.
+
+. *`Merge` Node:*
+** Añada un nodo `Merge` al lienzo.
+** Conecte las salidas de los *tres* nodos de `Google Sheets` a la única entrada del nodo `Merge`.
+** *Mode:* `Append`
+** Esto asegurará que el flujo de trabajo continúe solo después de que todas las operaciones de escritura en la hoja de cálculo hayan finalizado.
+
+. *Ejecución Final:*
+** Ejecute el flujo de trabajo completo desde el `Manual Trigger`.
+** Abra su documento de Google Sheets. Debería ver los chistes distribuidos correctamente en sus respectivas hojas, cada uno con su ID y la fecha de procesamiento.
+
+== Ejercicios Propuestos
+
+==== Ejercicio 1: Consolidación en una Sola Hoja (Dificultad: Baja)
+
+*Objetivo:* Modificar el flujo de trabajo guiado para que, en lugar de escribir en tres hojas diferentes, escriba todos los chistes en una única hoja llamada "Todos", pero añadiendo una columna que especifique la categoría original.
+
+*Requisitos:*
+
+. Elimine dos de los tres nodos de Google Sheets y el nodo `Merge`.
+. Modifique los nodos `Edit Fields (Set)` que estaban en las ramas del `Switch` (o añada nuevos si los eliminó) para que cada rama cree un campo llamado `categoria_original` con el valor correspondiente ("Programming", "Misc", "Dark").
+. Conecte las tres ramas a un único nodo `Google Sheets`.
+. Configure este nodo para que escriba en una nueva hoja "Todos" y mapee las columnas `ID`, `Chiste`, `Fecha de Procesamiento` y la nueva `categoria_original`.
+
+==== Ejercicio 2: Clasificación de Productos por Valoración (Dificultad: Media)
+
+*Objetivo:* Crear un nuevo flujo de trabajo desde cero que analice productos de una API de comercio electrónico de prueba, los clasifique según su valoración y los guarde en diferentes hojas de un documento de Google Sheets.
+
+*API a utilizar:* Fake Store API (`https://fakestoreapi.com/products`)
+
+*Requisitos:*
+
+. El flujo de trabajo debe iniciarse manualmente.
+. Obtenga todos los productos de la API.
+. Use `Split Out` para procesar cada producto.
+. Use un nodo `Switch` para clasificar los productos basándose en la valoración (`rating.rate`):
+** *Salida 0:* "Top" (valoración >= 4.5)
+** *Salida 1:* "Bueno" (valoración >= 3.5 y < 4.5)
+** *Salida 2:* "Regular" (valoración < 3.5)
+** (Pista: necesitará usar el modo `Rules` con múltiples condiciones o el modo `Expression` para lograr los rangos).
+. Cree un Google Sheet llamado "Análisis de Valoraciones" con tres hojas: `Top`, `Bueno` y `Regular`.
+. Escriba los productos en la hoja correspondiente, incluyendo al menos las columnas `ID`, `Título`, `Precio` y `Valoración`.
+
+==== Ejercicio 3: Gestor de Tareas por Prioridad (Dificultad: Alta)
+
+*Objetivo:* Crear un flujo de trabajo que simule la recepción de tareas, las clasifique por prioridad y las asigne a diferentes "departamentos" (hojas de cálculo), notificando a un canal genérico (otra hoja de cálculo) sobre la tarea asignada.
+
+*APIs a utilizar:*
+* Para simular tareas: The Bored API (`https://www.boredapi.com/api/activity`)
+* Para almacenar los resultados: Google Sheets
+
+*Requisitos:*
+
+. Use un nodo `Schedule Trigger` para que se ejecute cada 5 minutos.
+. En un nodo `Code` o `Edit Fields (Set)`, simule la obtención de 5 tareas. Para cada una, llame a la Bored API para obtener una `activity` y asígnele aleatoriamente una `priority` ("Alta", "Media", "Baja") y un `type` ("Técnico", "Marketing", "Administrativo").
+. Use un `Split Out` si es necesario para procesar cada tarea.
+. Use un nodo `Switch` para enrutar las tareas según su `priority`.
+. *Para cada rama de prioridad:*
+** Use otro nodo `Switch` anidado para enrutar la tarea según su `type`.
+** Escriba la tarea en una hoja de cálculo específica. Por ejemplo, una tarea de prioridad "Alta" y tipo "Técnico" iría a una hoja llamada "Tareas_Tecnicas_Alta". Deberá crear varias hojas para las combinaciones.
+. Use un nodo `Merge` para unir todas las ramas finales.
+. Después del `Merge`, use un único nodo `Google Sheets` para añadir una entrada a una hoja de log llamada "Registro_General" que contenga la `activity`, `priority`, `type` y la `hora_asignacion`.
+
+== Conclusiones y Avance de la Próxima Práctica
+
+Con esta práctica, hemos cruzado un umbral importante. La capacidad de autenticarse con servicios externos, combinada con el enrutamiento y la fusión de datos, nos permite diseñar flujos de trabajo que modelan procesos de negocio reales y complejos. Hemos aprendido a gestionar la lógica de múltiples casos con el nodo `Switch`, a consolidar resultados con `Merge` y, lo más importante, a persistir nuestros datos en un sistema externo como Google Sheets.
+
+En la próxima práctica, nos centraremos en la robustez y la modularidad de nuestros flujos de trabajo, introduciendo dos conceptos clave para la creación de automatizaciones a gran escala:
+
+* *Manejo de Errores:* Se presentará el `Error Trigger` y el nodo `Stop and Error`. Aprenderemos a construir flujos de trabajo de "manejo de errores" dedicados que se activan cuando un flujo principal falla, permitiéndonos enviar notificaciones, registrar el error y tomar acciones correctivas.
+* *Sub-flujos de Trabajo (Sub-workflows):* Se introducirán los nodos `Execute Workflow` y `Execute Workflow Trigger`. Aprenderemos a encapsular lógica reutilizable en flujos de trabajo secundarios que pueden ser llamados desde un flujo principal, promoviendo un diseño limpio, modular y fácil de mantener.
