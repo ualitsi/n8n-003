@@ -13,7 +13,6 @@ Nombre - Titulo
 Tutorial básico de n8n
 Manel Mena <manel.mena@ual.es>
 
-
 // Modo no numerado de apartados
 :numbered!: 
 
