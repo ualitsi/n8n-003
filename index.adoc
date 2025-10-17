@@ -221,7 +221,7 @@ image::6.png[Switch Node, align=center, link=""]
 *Objetivo:* Crear un flujo de trabajo que simule la recepción de tareas, las clasifique por prioridad y las asigne a diferentes "departamentos" (hojas de cálculo), notificando a un canal genérico (otra hoja de cálculo) sobre la tarea asignada.
 
 *APIs a utilizar:*
-* Para simular tareas: The Bored API (`https://www.boredapi.com/api/activity`)
+* Para simular tareas: The Bored API (`https://bored-api.appbrewery.com/random`)
 * Para almacenar los resultados: Google Sheets
 
 *Requisitos:*
