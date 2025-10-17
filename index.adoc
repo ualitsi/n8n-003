@@ -185,8 +185,7 @@ image::6.png[Switch Node, align=center, link=""]
 ** Abra su documento de Google Sheets. Debería ver los chistes distribuidos correctamente en sus respectivas hojas, cada uno con su ID y la fecha de procesamiento.
 
 == Ejercicios Propuestos
-
-==== Ejercicio 1: Consolidación en una Sola Hoja (Dificultad: Baja)
+=== Ejercicio 1: Consolidación en una Sola Hoja (Dificultad: Baja)
 
 *Objetivo:* Modificar el flujo de trabajo guiado para que, en lugar de escribir en tres hojas diferentes, escriba todos los chistes en una única hoja llamada "Todos", pero añadiendo una columna que especifique la categoría original.
 
@@ -197,7 +196,7 @@ image::6.png[Switch Node, align=center, link=""]
 . Conecte las tres ramas a un único nodo `Google Sheets`.
 . Configure este nodo para que escriba en una nueva hoja "Todos" y mapee las columnas `ID`, `Chiste`, `Fecha de Procesamiento` y la nueva `categoria_original`.
 
-==== Ejercicio 2: Clasificación de Productos por Valoración (Dificultad: Media)
+=== Ejercicio 2: Clasificación de Productos por Valoración (Dificultad: Media)
 
 *Objetivo:* Crear un nuevo flujo de trabajo desde cero que analice productos de una API de comercio electrónico de prueba, los clasifique según su valoración y los guarde en diferentes hojas de un documento de Google Sheets.
 
@@ -216,7 +215,7 @@ image::6.png[Switch Node, align=center, link=""]
 . Cree un Google Sheet llamado "Análisis de Valoraciones" con tres hojas: `Top`, `Bueno` y `Regular`.
 . Escriba los productos en la hoja correspondiente, incluyendo al menos las columnas `ID`, `Título`, `Precio` y `Valoración`.
 
-==== Ejercicio 3: Gestor de Tareas por Prioridad (Dificultad: Alta)
+=== Ejercicio 3: Gestor de Tareas por Prioridad (Dificultad: Alta)
 
 *Objetivo:* Crear un flujo de trabajo que simule la recepción de tareas, las clasifique por prioridad y las asigne a diferentes "departamentos" (hojas de cálculo), notificando a un canal genérico (otra hoja de cálculo) sobre la tarea asignada.
 
