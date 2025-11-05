@@ -6,6 +6,7 @@
 :imagesdir: ./images
 :source-highlighter: highlight.js
 
+
 ////
 Nombre - Titulo
 ////
@@ -242,4 +243,5 @@ Con esta práctica, hemos cruzado un umbral importante. La capacidad de autentic
 En la próxima práctica, nos centraremos en la robustez y la modularidad de nuestros flujos de trabajo, introduciendo dos conceptos clave para la creación de automatizaciones a gran escala:
 
 * *Manejo de Errores:* Se presentará el `Error Trigger` y el nodo `Stop and Error`. Aprenderemos a construir flujos de trabajo de "manejo de errores" dedicados que se activan cuando un flujo principal falla, permitiéndonos enviar notificaciones, registrar el error y tomar acciones correctivas.
+
 * *Sub-flujos de Trabajo (Sub-workflows):* Se introducirán los nodos `Execute Workflow` y `Execute Workflow Trigger`. Aprenderemos a encapsular lógica reutilizable en flujos de trabajo secundarios que pueden ser llamados desde un flujo principal, promoviendo un diseño limpio, modular y fácil de mantener.
