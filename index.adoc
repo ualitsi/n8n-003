@@ -20,13 +20,13 @@ Manel Mena <manel.mena@ual.es>
 [abstract]
 == Resumen
 
-Resumen la Práctica 3
+Esta práctica introduce la autenticación con servicios externos mediante el sistema de credenciales de n8n, y realiza la primera integración con un servicio persistente: Google Sheets. Se amplía la lógica de negocio más allá del nodo `IF` con el nodo `Switch` (enrutamiento de múltiples ramas) y el nodo `Merge` (fusión de flujos de datos). A lo largo de la sesión se construye un flujo de trabajo guiado que clasifica chistes por categoría y los escribe en hojas separadas de un documento de Google Sheets, y se resuelven varios ejercicios de complejidad creciente para consolidar los conceptos.
 
 .Objetivos
 
 * Gestión de Autenticación.
 * Integración con Servicios de Terceros.
-* Lógica de Enrutamiento Avanzada
+* Lógica de Enrutamiento Avanzada.
 * Fusión de Flujos de Datos.
 * Diseño de Flujos de Trabajo Modulares.
 
@@ -77,11 +77,11 @@ El nodo `Merge` está diseñado específicamente para este propósito. Espera a 
 * *Combine by Position (Combinar por Posición):* Une los ítems basándose en su orden. El primer ítem de la entrada 1 se fusiona con el primer ítem de la entrada 2, el segundo con el segundo, etc.
 * *Combine by Key (Combinar por Clave):* Es el modo más potente. Fusiona ítems de dos entradas que tienen un valor coincidente en un campo clave especificado. Por ejemplo, se podrían combinar datos de clientes de un sistema con datos de pedidos de otro, usando el `customer_id` como clave de unión.
 
-Para esta práctica, utilizaremos el modo `Append` para consolidar los resultados de nuestras diferentes ramas de `Switch` antes de finalizar el flujo de trabajo.
+Para el flujo de trabajo guiado, utilizaremos el modo `Append` para consolidar los resultados de nuestras diferentes ramas de `Switch` antes de finalizar el flujo de trabajo. Los modos `Combine by Position` y `Combine by Key` se pondrán en práctica en los ejercicios propuestos.
 
 == Desarrollo del Flujo de Trabajo Guiado
 
-En este ejercicio, construiremos un flujo de trabajo que obtiene chistes de tres categorías diferentes, los clasifica usando un nodo `Switch` y escribe cada tipo de chiste en una hoja separada dentro de un único documento de Google Sheets.
+En esta sección, construiremos paso a paso un flujo de trabajo que obtiene chistes de tres categorías diferentes, los clasifica usando un nodo `Switch` y escribe cada tipo de chiste en una hoja separada dentro de un único documento de Google Sheets. Al finalizar, el flujo quedará listo para ejecutarse de forma manual o programada.
 
 === Paso 1: Preparar el Documento de Google Sheets
 
@@ -186,18 +186,18 @@ image::6.png[Switch Node, align=center, link=""]
 ** Abra su documento de Google Sheets. Debería ver los chistes distribuidos correctamente en sus respectivas hojas, cada uno con su ID y la fecha de procesamiento.
 
 == Ejercicios Propuestos
-=== Ejercicio 1: Consolidación en una Sola Hoja (Dificultad: Baja)
+==== Ejercicio 1: Consolidación en una Sola Hoja (Dificultad: Baja)
 
 *Objetivo:* Modificar el flujo de trabajo guiado para que, en lugar de escribir en tres hojas diferentes, escriba todos los chistes en una única hoja llamada "Todos", pero añadiendo una columna que especifique la categoría original.
 
 *Requisitos:*
 
-. Elimine dos de los tres nodos de Google Sheets y el nodo `Merge`.
-. Modifique los nodos `Edit Fields (Set)` que estaban en las ramas del `Switch` (o añada nuevos si los eliminó) para que cada rama cree un campo llamado `categoria_original` con el valor correspondiente ("Programming", "Misc", "Dark").
-. Conecte las tres ramas a un único nodo `Google Sheets`.
+. Elimine los tres nodos de Google Sheets y el nodo `Merge` del flujo de trabajo guiado.
+. Entre cada salida del `Switch` y el nodo de Google Sheets, añada un nodo `Edit Fields (Set)` que cree un campo `categoria_original` con el valor correspondiente ("Programming", "Misc" o "Dark").
+. Conecte las tres salidas (a través de sus respectivos nodos `Edit Fields (Set)`) a un único nodo `Google Sheets`.
 . Configure este nodo para que escriba en una nueva hoja "Todos" y mapee las columnas `ID`, `Chiste`, `Fecha de Procesamiento` y la nueva `categoria_original`.
 
-=== Ejercicio 2: Clasificación de Productos por Valoración (Dificultad: Media)
+==== Ejercicio 2: Clasificación de Productos por Valoración (Dificultad: Media)
 
 *Objetivo:* Crear un nuevo flujo de trabajo desde cero que analice productos de una API de comercio electrónico de prueba, los clasifique según su valoración y los guarde en diferentes hojas de un documento de Google Sheets.
 
@@ -205,36 +205,117 @@ image::6.png[Switch Node, align=center, link=""]
 
 *Requisitos:*
 
-. El flujo de trabajo debe iniciarse manualmente.
-. Obtenga todos los productos de la API.
-. Use `Split Out` para procesar cada producto.
-. Use un nodo `Switch` para clasificar los productos basándose en la valoración (`rating.rate`):
-** *Salida 0:* "Top" (valoración >= 4.5)
-** *Salida 1:* "Bueno" (valoración >= 3.5 y < 4.5)
-** *Salida 2:* "Regular" (valoración < 3.5)
-** (Pista: necesitará usar el modo `Rules` con múltiples condiciones o el modo `Expression` para lograr los rangos).
+. El flujo de trabajo debe iniciarse con un `Manual Trigger`.
+. Use un `HTTP Request` para obtener todos los productos de la API.
+. Use un `Split Out` sobre el campo `products` (o el array de la respuesta) para procesar cada producto individualmente.
+. Use un nodo `Switch` en modo `Rules` con el *Routing Field* `{{ $json.rating.rate }}` para clasificar los productos en tres rangos:
+** *Salida 0 ("Top"):* una condición `is greater than or equal to` `4.5`.
+** *Salida 1 ("Bueno"):* dos condiciones combinadas con `AND`: `is greater than or equal to` `3.5` **y** `is less than` `4.5`.
+** *Salida 2 ("Regular"):* una condición `is less than` `3.5`.
+** (Pista: en el modo `Rules`, cada salida puede tener varias condiciones. Añada una segunda condición a la Salida 1 y asegúrese de que el operador lógico entre condiciones sea `AND`).
 . Cree un Google Sheet llamado "Análisis de Valoraciones" con tres hojas: `Top`, `Bueno` y `Regular`.
 . Escriba los productos en la hoja correspondiente, incluyendo al menos las columnas `ID`, `Título`, `Precio` y `Valoración`.
 
-=== Ejercicio 3: Gestor de Tareas por Prioridad (Dificultad: Alta)
+==== Ejercicio 3: Gestor de Tareas por Prioridad (Dificultad: Alta)
 
-*Objetivo:* Crear un flujo de trabajo que simule la recepción de tareas, las clasifique por prioridad y las asigne a diferentes "departamentos" (hojas de cálculo), notificando a un canal genérico (otra hoja de cálculo) sobre la tarea asignada.
+*Objetivo:* Crear un flujo de trabajo que obtenga actividades aleatorias, las clasifique por prioridad y tipo, las asigne a diferentes "departamentos" (hojas de cálculo) y registre cada asignación en un log general.
 
 *APIs a utilizar:*
-. Para simular tareas: The Bored API (`https://bored-api.appbrewery.com/random`)
+. Para obtener actividades: The Bored API (`https://bored-api.appbrewery.com/filter?number=5`)
 . Para almacenar los resultados: Google Sheets
 
 *Requisitos:*
 
 . Use un nodo `Schedule Trigger` para que se ejecute cada 5 minutos.
-. En un nodo `Code` o `Edit Fields (Set)`, simule la obtención de 5 tareas. Para cada una, llame a la Bored API para obtener una `activity` y asígnele aleatoriamente una `priority` ("Alta", "Media", "Baja") y un `type` ("Técnico", "Marketing", "Administrativo").
-. Use un `Split Out` si es necesario para procesar cada tarea.
-. Use un nodo `Switch` para enrutar las tareas según su `priority`.
+. Use un `HTTP Request` para obtener 5 actividades de la Bored API (el endpoint `/filter?number=5` devuelve un array de 5 objetos).
+. Use un `Split Out` sobre el array de actividades para procesar cada una individualmente.
+. Añada un nodo `Edit Fields (Set)` (o `Code`) que, para cada actividad, genere aleatoriamente un campo `priority` con uno de los valores "Alta", "Media" o "Baja", y un campo `type` con uno de los valores "Técnico", "Marketing" o "Administrativo". (Pista: puede usar la expresión `{{ $random.int(0, 2) }}` para generar un entero aleatorio y mapearlo a un valor).
+. Use un nodo `Switch` para enrutar las tareas según su `priority` (tres salidas: "Alta", "Media", "Baja").
 . *Para cada rama de prioridad:*
-** Use otro nodo `Switch` anidado para enrutar la tarea según su `type`.
-** Escriba la tarea en una hoja de cálculo específica. Por ejemplo, una tarea de prioridad "Alta" y tipo "Técnico" iría a una hoja llamada "Tareas_Tecnicas_Alta". Deberá crear varias hojas para las combinaciones.
-. Use un nodo `Merge` para unir todas las ramas finales.
-. Después del `Merge`, use un único nodo `Google Sheets` para añadir una entrada a una hoja de log llamada "Registro_General" que contenga la `activity`, `priority`, `type` y la `hora_asignacion`.
+** Use otro nodo `Switch` anidado para enrutar la tarea según su `type` (tres salidas: "Técnico", "Marketing", "Administrativo").
+** Escriba la tarea en una hoja de cálculo específica. Por ejemplo, una tarea de prioridad "Alta" y tipo "Técnico" iría a una hoja llamada "Tareas_Tecnicas_Alta". Deberá crear las 9 hojas correspondientes a las combinaciones.
+. Use un nodo `Merge` en modo `Append` para unir todas las ramas finales.
+. Después del `Merge`, use un único nodo `Google Sheets` para añadir una entrada a una hoja de log llamada "Registro_General" que contenga la `activity`, `priority`, `type` y la `hora_asignacion` (use `{{ $now }}`).
+
+==== Ejercicio 4: Repositorios de GitHub por Lenguaje (Dificultad: Media)
+
+*Objetivo:* Crear un flujo de trabajo que obtenga la lista de repositorios de una organización de GitHub, los clasifique por lenguaje de programación usando un nodo `Switch` con salida `default`, y los guarde en hojas separadas de un documento de Google Sheets.
+
+*API a utilizar:* GitHub API (gratuita, sin clave para uso básico): `https://api.github.com/orgs/{org}/repos?per_page=30` (sustituya `{org}` por el nombre de una organización, por ejemplo `google` o `microsoft`).
+
+*Requisitos:*
+
+. El flujo de trabajo debe iniciarse con un `Manual Trigger`.
+. Use un `HTTP Request` para obtener los repositorios de la organización elegida.
+. Use un `Split Out` sobre el array de repositorios para procesar cada uno individualmente.
+. Use un nodo `Switch` en modo `Rules` con el *Routing Field* `{{ $json.language }}` para clasificar los repositorios:
+** *Salida 0:* `is equal to` `JavaScript`
+** *Salida 1:* `is equal to` `Python`
+** *Salida 2:* `is equal to` `C++`
+** *Salida `default`:* para todos los demás lenguajes (incluyendo `null` si el repositorio no tiene lenguaje definido).
+. Cree un Google Sheet con cuatro hojas: `JavaScript`, `Python`, `C++` y `Otros`.
+. Escriba los repositorios en la hoja correspondiente, incluyendo al menos las columnas `Nombre`, `Lenguaje`, `Estrellas` (`stargazers_count`) y `Última Actualización` (`updated_at`).
+. *Pregunta de reflexión:* ¿Qué pasaría si la organización no tiene ningún repositorio en Python? ¿Se ejecutaría la rama correspondiente? Investigue cómo se comporta un nodo `Switch` cuando una de sus salidas no recibe ítems.
+
+==== Ejercicio 5: Pronóstico del Tiempo con Transformación de Datos (Dificultad: Media-Alta)
+
+*Objetivo:* Crear un flujo de trabajo que obtenga el pronóstico del tiempo a 5 días, transforme la estructura de datos de la API (arrays paralelos) a un formato procesable, clasifique cada día por tipo de tiempo y guarde el resultado en Google Sheets.
+
+*API a utilizar:* Open-Meteo (gratuita, sin clave API): `https://api.open-meteo.com/v1/forecast?latitude=40.4168&longitude=-3.7038&daily=weather_code,temperature_2m_max&timezone=auto&forecast_days=5` (coordenadas de Madrid).
+
+*Requisitos:*
+
+. El flujo de trabajo debe iniciarse con un `Manual Trigger`.
+. Use un `HTTP Request` para obtener el pronóstico. Observe que la respuesta contiene un objeto `daily` con *arrays paralelos* (`time`, `weather_code`, `temperature_2m_max`), no un array de objetos.
+. Añada un nodo `Code` (tipo JavaScript) que transforme los arrays paralelos en un array de objetos, uno por día. Cada objeto debe tener las propiedades `fecha`, `codigo` y `temp_max`. (Pista: use un bucle `for` sobre el índice del array `time` y construya un objeto con `daily.time[i]`, `daily.weather_code[i]` y `daily.temperature_2m_max[i]`).
+. Use un `Split Out` sobre el array de objetos generado por el nodo `Code`.
+. Use un nodo `Switch` en modo `Rules` con el *Routing Field* `{{ $json.codigo }}` para clasificar cada día:
+** *Salida 0 ("Despejado"):* `is less than or equal to` `1`
+** *Salida 1 ("Nublado"):* `is greater than` `1` y `is less than or equal to` `3` (dos condiciones con `AND`)
+** *Salida 2 ("Lluvia"):* `is greater than or equal to` `51` y `is less than or equal to` `67` (dos condiciones con `AND`)
+** *Salida `default`:* para el resto de códigos (nieve, tormentas, etc.).
+. Cree un Google Sheet con cuatro hojas: `Despejado`, `Nublado`, `Lluvia` y `Otro`.
+. Escriba cada día en la hoja correspondiente, incluyendo las columnas `Fecha`, `Código WMO`, `Temperatura Máx (°C)` y `Categoría`.
+. *Pregunta de reflexión:* Investigue la tabla de códigos WMO (World Meteorological Organization) y añada una quinta salida al `Switch` para los días con nieve (códigos 71-77).
+
+==== Ejercicio 6: Combinación de Datos por Posición (Dificultad: Alta)
+
+*Objetivo:* Crear un flujo de trabajo que obtenga datos de dos APIs diferentes en paralelo y los combine posición a posición usando el nodo `Merge` en modo `Combine by Position`, para generar un "plan de día" que incluye un chiste y una actividad.
+
+*APIs a utilizar:*
+. JokeAPI: `https://v2.jokeapi.dev/joke/Programming?type=single&amount=5`
+. Bored API: `https://bored-api.appbrewery.com/filter?number=5`
+
+*Requisitos:*
+
+. El flujo de trabajo debe iniciarse con un `Manual Trigger`.
+. Añada *dos* nodos `HTTP Request` conectados en paralelo al `Manual Trigger`: uno para la JokeAPI y otro para la Bored API.
+. Añada un `Split Out` a la salida de cada `HTTP Request` (campo `jokes` para la JokeAPI; el array de la Bored API para la otra).
+. Añada un nodo `Merge` en modo `Combine by Position` y conecte las salidas de ambos `Split Out` a las dos entradas del `Merge`. El primer chiste se combinará con la primera actividad, el segundo con la segunda, y así sucesivamente.
+. Añada un nodo `Edit Fields (Set)` después del `Merge` que cree un campo `plan` combinando el chiste (`{{ $json.joke }}`) y la actividad (`{{ $json.activity }}`) en un único texto.
+. Escriba los planes en una hoja de Google Sheets llamada "Planes", con las columnas `Chiste`, `Actividad` y `Plan`.
+. *Pregunta de reflexión:* ¿Qué pasaría si una de las APIs devolviera menos de 5 elementos? Investigue cómo se comporta el modo `Combine by Position` cuando las dos entradas tienen un número diferente de ítems.
+
+==== Ejercicio 7: Informe Diario de Productos (Dificultad: Muy Alta)
+
+*Objetivo:* Crear un flujo de trabajo completo y autónomo que se ejecute una vez al día, obtenga todos los productos de la Fake Store API, los clasifique por rango de precio, los consolide en un único flujo y genere un informe en una sola hoja de Google Sheets. Este ejercicio combina todos los conceptos de la práctica en un único pipeline.
+
+*API a utilizar:* Fake Store API (`https://fakestoreapi.com/products`)
+
+*Requisitos:*
+
+. El flujo de trabajo debe iniciarse con un `Schedule Trigger` que se ejecute una vez al día (a las 8:00 AM).
+. Use un `HTTP Request` para obtener todos los productos.
+. Use un `Split Out` para procesar cada producto individualmente.
+. Use un nodo `Switch` en modo `Rules` con el *Routing Field* `{{ $json.price }}` para clasificar los productos en tres rangos:
+** *Salida 0 ("Económico"):* `is less than` `50`
+** *Salida 1 ("Medio"):* `is greater than or equal to` `50` y `is less than or equal to` `200` (dos condiciones con `AND`)
+** *Salida 2 ("Premium"):* `is greater than` `200`
+. En cada rama, añada un nodo `Edit Fields (Set)` que cree un campo `categoria` con el valor correspondiente ("Económico", "Medio" o "Premium").
+. Use un nodo `Merge` en modo `Append` para consolidar las tres ramas en un único flujo.
+. Después del `Merge`, use un único nodo `Google Sheets` para escribir todos los productos en una hoja llamada "Informe_Diario", incluyendo las columnas `ID`, `Título`, `Precio`, `Categoría` y `Fecha del Informe` (use `{{ $now }}`).
+. Active el flujo de trabajo y verifique que se ejecuta correctamente a la hora programada.
+. *Pregunta de reflexión:* ¿Cómo modificaría este flujo para que, en lugar de escribir todos los productos en una sola hoja, escribiera un *resumen* (número de productos por categoría) en una hoja separada? Investigue el nodo `Aggregate` o el uso de un nodo `Code` para calcular agregados.
 
 == Conclusiones y Avance de la Próxima Práctica
 

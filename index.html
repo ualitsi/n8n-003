@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.22">
+<meta name="generator" content="Asciidoctor.js 4.0.6">
 <meta name="author" content="Tutorial básico de n8n">
 <title>Práctica 3: Enrutamiento Avanzado, Fusión de Datos e Integración con Google Sheets</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CNoto+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
 /* Uncomment the following line when using as a custom stylesheet */
@@ -95,10 +95,10 @@ dl dd{margin-bottom:1.25em}
 blockquote{margin:0 0 1.25em;padding:.5625em 1.25em 0 1.1875em;border-left:1px solid #ddd}
 blockquote,blockquote p{line-height:1.6;color:rgba(0,0,0,.85)}
 @media screen and (min-width:768px){h1,h2,h3,#toctitle,.sidebarblock>.content>.title,h4,h5,h6{line-height:1.2}
-h1{font-size:2.75em}
-h2{font-size:2.3125em}
-h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
-h4{font-size:1.4375em}}
+  h1{font-size:2.75em}
+  h2{font-size:2.3125em}
+  h3,#toctitle,.sidebarblock>.content>.title{font-size:1.6875em}
+  h4{font-size:1.4375em}}
 table{background:#fff;margin-bottom:1.25em;border:1px solid #dedede;word-wrap:normal}
 table thead,table tfoot{background:#f7f8f7}
 table thead tr th,table thead tr td,table tfoot tr th,table tfoot tr td{padding:.5em .625em .625em;font-size:inherit;color:rgba(0,0,0,.8);text-align:left}
@@ -117,7 +117,6 @@ h1 strong,h2 strong,h3 strong,#toctitle strong,.sidebarblock>.content>.title str
 :not(pre):not([class^=L])>code{font-size:.9375em;font-style:normal!important;letter-spacing:0;padding:.1em .5ex;word-spacing:-.15em;background:#f7f7f8;border-radius:4px;line-height:1.45;text-rendering:optimizeSpeed}
 pre{color:rgba(0,0,0,.9);font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;line-height:1.45;text-rendering:optimizeSpeed}
 pre code,pre pre{color:inherit;font-size:inherit;line-height:inherit}
-pre>code{display:block}
 pre.nowrap,pre.nowrap pre{white-space:pre;word-wrap:normal}
 em em{font-style:normal}
 strong strong{font-weight:400}
@@ -162,21 +161,21 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toc a:active{text-decoration:underline}
 #toctitle{color:#7a2518;font-size:1.2em}
 @media screen and (min-width:768px){#toctitle{font-size:1.375em}
-body.toc2{padding-left:15em;padding-right:0}
-body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
-#toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
-#toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
-#toc.toc2>ul{font-size:.9em;margin-bottom:0}
-#toc.toc2 ul ul{margin-left:0;padding-left:1em}
-#toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
-body.toc2.toc-right{padding-left:0;padding-right:15em}
-body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
+  body.toc2{padding-left:15em;padding-right:0}
+  body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+  #toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
+  #toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
+  #toc.toc2>ul{font-size:.9em;margin-bottom:0}
+  #toc.toc2 ul ul{margin-left:0;padding-left:1em}
+  #toc.toc2 ul.sectlevel0 ul.sectlevel1{padding-left:0;margin-top:.5em;margin-bottom:.5em}
+  body.toc2.toc-right{padding-left:0;padding-right:15em}
+  body.toc2.toc-right #toc.toc2{border-right-width:0;border-left:1px solid #e7e7e9;left:auto;right:0}}
 @media screen and (min-width:1280px){body.toc2{padding-left:20em;padding-right:0}
-#toc.toc2{width:20em}
-#toc.toc2 #toctitle{font-size:1.375em}
-#toc.toc2>ul{font-size:.95em}
-#toc.toc2 ul ul{padding-left:1.25em}
-body.toc2.toc-right{padding-left:0;padding-right:20em}}
+  #toc.toc2{width:20em}
+  #toc.toc2 #toctitle{font-size:1.375em}
+  #toc.toc2>ul{font-size:.95em}
+  #toc.toc2 ul ul{padding-left:1.25em}
+  body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content #toc{border:1px solid #e0e0dc;margin-bottom:1.25em;padding:1.25em;background:#f8f8f7;border-radius:4px}
 #content #toc>:first-child{margin-top:0}
 #content #toc>:last-child{margin-bottom:0}
@@ -185,7 +184,7 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content{margin-bottom:.625em}
 .sect1{padding-bottom:.625em}
 @media screen and (min-width:768px){#content{margin-bottom:1.25em}
-.sect1{padding-bottom:1.25em}}
+  .sect1{padding-bottom:1.25em}}
 .sect1:last-child{padding-bottom:0}
 .sect1+.sect1{border-top:1px solid #e7e7e9}
 #content h1>a.anchor,h2>a.anchor,h3>a.anchor,#toctitle>a.anchor,.sidebarblock>.content>.title>a.anchor,h4>a.anchor,h5>a.anchor,h6>a.anchor{position:absolute;z-index:1001;width:1.5ex;margin-left:-1.5ex;display:block;text-decoration:none!important;visibility:hidden;text-align:center;font-weight:400}
@@ -220,6 +219,7 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .literalblock pre,.listingblock>.content>pre:not(.highlight),.listingblock>.content>pre[class=highlight],.listingblock>.content>pre[class^="highlight "]{background:#f7f7f8}
 .literalblock.output pre{color:#f7f7f8;background:rgba(0,0,0,.9)}
 .listingblock>.content{position:relative}
+.listingblock pre>code{display:block}
 .listingblock code[data-lang]::before{display:none;content:attr(data-lang);position:absolute;font-size:.75em;top:.425rem;right:.5rem;line-height:1;text-transform:uppercase;color:inherit;opacity:.5}
 .listingblock:hover code[data-lang]::before{display:block}
 .listingblock.terminal pre .command::before{content:attr(data-prompt);padding-right:.5em;color:inherit;opacity:.5}
@@ -399,39 +399,39 @@ p{margin-bottom:1.25rem}
 .print-only{display:none!important}
 @page{margin:1.25cm .75cm}
 @media print{*{box-shadow:none!important;text-shadow:none!important}
-html{font-size:80%}
-a{color:inherit!important;text-decoration:underline!important}
-a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
-a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
-abbr[title]{border-bottom:1px dotted}
-abbr[title]::after{content:" (" attr(title) ")"}
-pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
-thead{display:table-header-group}
-svg{max-width:100%}
-p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
-h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
-#header,#content,#footnotes,#footer{max-width:none}
-#toc,.sidebarblock,.exampleblock>.content{background:none!important}
-#toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
-body.book #header{text-align:center}
-body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
-body.book #header .details{border:0!important;display:block;padding:0!important}
-body.book #header .details span:first-child{margin-left:0!important}
-body.book #header .details br{display:block}
-body.book #header .details br+span::before{content:none!important}
-body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
-body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
-.listingblock code[data-lang]::before{display:block}
-#footer{padding:0 .9375em}
-.hide-on-print{display:none!important}
-.print-only{display:block!important}
-.hide-for-print{display:none!important}
-.show-for-print{display:inherit!important}}
+  html{font-size:80%}
+  a{color:inherit!important;text-decoration:underline!important}
+  a.bare,a[href^="#"],a[href^="mailto:"]{text-decoration:none!important}
+  a[href^="http:"]:not(.bare)::after,a[href^="https:"]:not(.bare)::after{content:"(" attr(href) ")";display:inline-block;font-size:.875em;padding-left:.25em}
+  abbr[title]{border-bottom:1px dotted}
+  abbr[title]::after{content:" (" attr(title) ")"}
+  pre,blockquote,tr,img,object,svg{page-break-inside:avoid}
+  thead{display:table-header-group}
+  svg{max-width:100%}
+  p,blockquote,dt,td.content{font-size:1em;orphans:3;widows:3}
+  h2,h3,#toctitle,.sidebarblock>.content>.title{page-break-after:avoid}
+  #header,#content,#footnotes,#footer{max-width:none}
+  #toc,.sidebarblock,.exampleblock>.content{background:none!important}
+  #toc{border-bottom:1px solid #dddddf!important;padding-bottom:0!important}
+  body.book #header{text-align:center}
+  body.book #header>h1:first-child{border:0!important;margin:2.5em 0 1em}
+  body.book #header .details{border:0!important;display:block;padding:0!important}
+  body.book #header .details span:first-child{margin-left:0!important}
+  body.book #header .details br{display:block}
+  body.book #header .details br+span::before{content:none!important}
+  body.book #toc{border:0!important;text-align:left!important;padding:0!important;margin:0!important}
+  body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-break-before:always}
+  .listingblock code[data-lang]::before{display:block}
+  #footer{padding:0 .9375em}
+  .hide-on-print{display:none!important}
+  .print-only{display:block!important}
+  .hide-for-print{display:none!important}
+  .show-for-print{display:inherit!important}}
 @media amzn-kf8,print{#header>h1:first-child{margin-top:1.25rem}
-.sect1{padding:0!important}
-.sect1+.sect1{border:0}
-#footer{background:none}
-#footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
+  .sect1{padding:0!important}
+  .sect1+.sect1{border:0}
+  #footer{background:none}
+  #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
@@ -463,10 +463,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#_ejercicios_propuestos">4. Ejercicios Propuestos</a>
-<ul class="sectlevel2">
-<li><a href="#_ejercicio_1_consolidación_en_una_sola_hoja_dificultad_baja">4.1. Ejercicio 1: Consolidación en una Sola Hoja (Dificultad: Baja)</a></li>
-<li><a href="#_ejercicio_2_clasificación_de_productos_por_valoración_dificultad_media">4.2. Ejercicio 2: Clasificación de Productos por Valoración (Dificultad: Media)</a></li>
-<li><a href="#_ejercicio_3_gestor_de_tareas_por_prioridad_dificultad_alta">4.3. Ejercicio 3: Gestor de Tareas por Prioridad (Dificultad: Alta)</a></li>
+<ul class="sectlevel3">
 </ul>
 </li>
 <li><a href="#_conclusiones_y_avance_de_la_próxima_práctica">5. Conclusiones y Avance de la Próxima Práctica</a></li>
@@ -478,7 +475,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_resumen">Resumen</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Resumen la Práctica 3</p>
+<p>Esta práctica introduce la autenticación con servicios externos mediante el sistema de credenciales de n8n, y realiza la primera integración con un servicio persistente: Google Sheets. Se amplía la lógica de negocio más allá del nodo <code>IF</code> con el nodo <code>Switch</code> (enrutamiento de múltiples ramas) y el nodo <code>Merge</code> (fusión de flujos de datos). A lo largo de la sesión se construye un flujo de trabajo guiado que clasifica chistes por categoría y los escribe en hojas separadas de un documento de Google Sheets, y se resuelven varios ejercicios de complejidad creciente para consolidar los conceptos.</p>
 </div>
 <div class="ulist">
 <div class="title">Objetivos</div>
@@ -490,7 +487,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Integración con Servicios de Terceros.</p>
 </li>
 <li>
-<p>Lógica de Enrutamiento Avanzada</p>
+<p>Lógica de Enrutamiento Avanzada.</p>
 </li>
 <li>
 <p>Fusión de Flujos de Datos.</p>
@@ -594,7 +591,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 <div class="paragraph">
-<p>Para esta práctica, utilizaremos el modo <code>Append</code> para consolidar los resultados de nuestras diferentes ramas de <code>Switch</code> antes de finalizar el flujo de trabajo.</p>
+<p>Para el flujo de trabajo guiado, utilizaremos el modo <code>Append</code> para consolidar los resultados de nuestras diferentes ramas de <code>Switch</code> antes de finalizar el flujo de trabajo. Los modos <code>Combine by Position</code> y <code>Combine by Key</code> se pondrán en práctica en los ejercicios propuestos.</p>
 </div>
 </div>
 </div>
@@ -603,7 +600,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_desarrollo_del_flujo_de_trabajo_guiado">3. Desarrollo del Flujo de Trabajo Guiado</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>En este ejercicio, construiremos un flujo de trabajo que obtiene chistes de tres categorías diferentes, los clasifica usando un nodo <code>Switch</code> y escribe cada tipo de chiste en una hoja separada dentro de un único documento de Google Sheets.</p>
+<p>En esta sección, construiremos paso a paso un flujo de trabajo que obtiene chistes de tres categorías diferentes, los clasifica usando un nodo <code>Switch</code> y escribe cada tipo de chiste en una hoja separada dentro de un único documento de Google Sheets. Al finalizar, el flujo quedará listo para ejecutarse de forma manual o programada.</p>
 </div>
 <div class="sect2">
 <h3 id="_paso_1_preparar_el_documento_de_google_sheets">3.1. Paso 1: Preparar el Documento de Google Sheets</h3>
@@ -641,7 +638,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
-<a class="image" href=""><img src="./images/1.png" alt="Google Sheets API"></a>
+<img src="./images/1.png" alt="Google Sheets API">
 </div>
 <div class="title">Figure 1. Google Sheets API</div>
 </div>
@@ -663,7 +660,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
-<a class="image" href=""><img src="./images/3.png" alt="URI de redireccionamiento autorizados"></a>
+<img src="./images/3.png" alt="URI de redireccionamiento autorizados">
 </div>
 <div class="title">Figure 2. URI de redireccionamiento autorizados</div>
 </div>
@@ -676,7 +673,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
-<a class="image" href=""><img src="./images/2.png" alt="Client Credentials Google"></a>
+<img src="./images/2.png" alt="Client Credentials Google">
 </div>
 <div class="title">Figure 3. Client Credentials Google</div>
 </div>
@@ -695,7 +692,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
-<a class="image" href=""><img src="./images/4.png" alt="Example Integration Google Sheets"></a>
+<img src="./images/4.png" alt="Example Integration Google Sheets">
 </div>
 <div class="title">Figure 4. Example Integration Google Sheets</div>
 </div>
@@ -740,7 +737,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
-<a class="image" href=""><img src="./images/5.png" alt="Split Out"></a>
+<img src="./images/5.png" alt="Split Out">
 </div>
 <div class="title">Figure 5. Split Out</div>
 </div>
@@ -791,7 +788,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
-<a class="image" href=""><img src="./images/6.png" alt="Switch Node"></a>
+<img src="./images/6.png" alt="Switch Node">
 </div>
 <div class="title">Figure 6. Switch Node</div>
 </div>
@@ -908,8 +905,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_ejercicios_propuestos">4. Ejercicios Propuestos</h2>
 <div class="sectionbody">
-<div class="sect2">
-<h3 id="_ejercicio_1_consolidación_en_una_sola_hoja_dificultad_baja">4.1. Ejercicio 1: Consolidación en una Sola Hoja (Dificultad: Baja)</h3>
+<div class="sect3">
+<h4 id="_ejercicio_1_consolidación_en_una_sola_hoja_dificultad_baja">4.1. Ejercicio 1: Consolidación en una Sola Hoja (Dificultad: Baja)</h4>
 <div class="paragraph">
 <p><strong>Objetivo:</strong> Modificar el flujo de trabajo guiado para que, en lugar de escribir en tres hojas diferentes, escriba todos los chistes en una única hoja llamada "Todos", pero añadiendo una columna que especifique la categoría original.</p>
 </div>
@@ -919,13 +916,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Elimine dos de los tres nodos de Google Sheets y el nodo <code>Merge</code>.</p>
+<p>Elimine los tres nodos de Google Sheets y el nodo <code>Merge</code> del flujo de trabajo guiado.</p>
 </li>
 <li>
-<p>Modifique los nodos <code>Edit Fields (Set)</code> que estaban en las ramas del <code>Switch</code> (o añada nuevos si los eliminó) para que cada rama cree un campo llamado <code>categoria_original</code> con el valor correspondiente ("Programming", "Misc", "Dark").</p>
+<p>Entre cada salida del <code>Switch</code> y el nodo de Google Sheets, añada un nodo <code>Edit Fields (Set)</code> que cree un campo <code>categoria_original</code> con el valor correspondiente ("Programming", "Misc" o "Dark").</p>
 </li>
 <li>
-<p>Conecte las tres ramas a un único nodo <code>Google Sheets</code>.</p>
+<p>Conecte las tres salidas (a través de sus respectivos nodos <code>Edit Fields (Set)</code>) a un único nodo <code>Google Sheets</code>.</p>
 </li>
 <li>
 <p>Configure este nodo para que escriba en una nueva hoja "Todos" y mapee las columnas <code>ID</code>, <code>Chiste</code>, <code>Fecha de Procesamiento</code> y la nueva <code>categoria_original</code>.</p>
@@ -933,8 +930,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_ejercicio_2_clasificación_de_productos_por_valoración_dificultad_media">4.2. Ejercicio 2: Clasificación de Productos por Valoración (Dificultad: Media)</h3>
+<div class="sect3">
+<h4 id="_ejercicio_2_clasificación_de_productos_por_valoración_dificultad_media">4.2. Ejercicio 2: Clasificación de Productos por Valoración (Dificultad: Media)</h4>
 <div class="paragraph">
 <p><strong>Objetivo:</strong> Crear un nuevo flujo de trabajo desde cero que analice productos de una API de comercio electrónico de prueba, los clasifique según su valoración y los guarde en diferentes hojas de un documento de Google Sheets.</p>
 </div>
@@ -947,29 +944,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>El flujo de trabajo debe iniciarse manualmente.</p>
+<p>El flujo de trabajo debe iniciarse con un <code>Manual Trigger</code>.</p>
 </li>
 <li>
-<p>Obtenga todos los productos de la API.</p>
+<p>Use un <code>HTTP Request</code> para obtener todos los productos de la API.</p>
 </li>
 <li>
-<p>Use <code>Split Out</code> para procesar cada producto.</p>
+<p>Use un <code>Split Out</code> sobre el campo <code>products</code> (o el array de la respuesta) para procesar cada producto individualmente.</p>
 </li>
 <li>
-<p>Use un nodo <code>Switch</code> para clasificar los productos basándose en la valoración (<code>rating.rate</code>):</p>
+<p>Use un nodo <code>Switch</code> en modo <code>Rules</code> con el <strong>Routing Field</strong> <code>{{ $json.rating.rate }}</code> para clasificar los productos en tres rangos:</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Salida 0:</strong> "Top" (valoración &gt;= 4.5)</p>
+<p><strong>Salida 0 ("Top"):</strong> una condición <code>is greater than or equal to</code> <code>4.5</code>.</p>
 </li>
 <li>
-<p><strong>Salida 1:</strong> "Bueno" (valoración &gt;= 3.5 y &lt; 4.5)</p>
+<p><strong>Salida 1 ("Bueno"):</strong> dos condiciones combinadas con <code>AND</code>: <code>is greater than or equal to</code> <code>3.5</code> <strong>y</strong> <code>is less than</code> <code>4.5</code>.</p>
 </li>
 <li>
-<p><strong>Salida 2:</strong> "Regular" (valoración &lt; 3.5)</p>
+<p><strong>Salida 2 ("Regular"):</strong> una condición <code>is less than</code> <code>3.5</code>.</p>
 </li>
 <li>
-<p>(Pista: necesitará usar el modo <code>Rules</code> con múltiples condiciones o el modo <code>Expression</code> para lograr los rangos).</p>
+<p>(Pista: en el modo <code>Rules</code>, cada salida puede tener varias condiciones. Añada una segunda condición a la Salida 1 y asegúrese de que el operador lógico entre condiciones sea <code>AND</code>).</p>
 </li>
 </ul>
 </div>
@@ -983,14 +980,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_ejercicio_3_gestor_de_tareas_por_prioridad_dificultad_alta">4.3. Ejercicio 3: Gestor de Tareas por Prioridad (Dificultad: Alta)</h3>
+<div class="sect3">
+<h4 id="_ejercicio_3_gestor_de_tareas_por_prioridad_dificultad_alta">4.3. Ejercicio 3: Gestor de Tareas por Prioridad (Dificultad: Alta)</h4>
 <div class="paragraph">
-<p><strong>Objetivo:</strong> Crear un flujo de trabajo que simule la recepción de tareas, las clasifique por prioridad y las asigne a diferentes "departamentos" (hojas de cálculo), notificando a un canal genérico (otra hoja de cálculo) sobre la tarea asignada.</p>
+<p><strong>Objetivo:</strong> Crear un flujo de trabajo que obtenga actividades aleatorias, las clasifique por prioridad y tipo, las asigne a diferentes "departamentos" (hojas de cálculo) y registre cada asignación en un log general.</p>
 </div>
 <div class="paragraph">
 <p><strong>APIs a utilizar:</strong>
-. Para simular tareas: The Bored API (<code><a href="https://bored-api.appbrewery.com/random" class="bare">https://bored-api.appbrewery.com/random</a></code>)
+. Para obtener actividades: The Bored API (<code><a href="https://bored-api.appbrewery.com/filter?number=5" class="bare">https://bored-api.appbrewery.com/filter?number=5</a></code>)
 . Para almacenar los resultados: Google Sheets</p>
 </div>
 <div class="paragraph">
@@ -1002,32 +999,239 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Use un nodo <code>Schedule Trigger</code> para que se ejecute cada 5 minutos.</p>
 </li>
 <li>
-<p>En un nodo <code>Code</code> o <code>Edit Fields (Set)</code>, simule la obtención de 5 tareas. Para cada una, llame a la Bored API para obtener una <code>activity</code> y asígnele aleatoriamente una <code>priority</code> ("Alta", "Media", "Baja") y un <code>type</code> ("Técnico", "Marketing", "Administrativo").</p>
+<p>Use un <code>HTTP Request</code> para obtener 5 actividades de la Bored API (el endpoint <code>/filter?number=5</code> devuelve un array de 5 objetos).</p>
 </li>
 <li>
-<p>Use un <code>Split Out</code> si es necesario para procesar cada tarea.</p>
+<p>Use un <code>Split Out</code> sobre el array de actividades para procesar cada una individualmente.</p>
 </li>
 <li>
-<p>Use un nodo <code>Switch</code> para enrutar las tareas según su <code>priority</code>.</p>
+<p>Añada un nodo <code>Edit Fields (Set)</code> (o <code>Code</code>) que, para cada actividad, genere aleatoriamente un campo <code>priority</code> con uno de los valores "Alta", "Media" o "Baja", y un campo <code>type</code> con uno de los valores "Técnico", "Marketing" o "Administrativo". (Pista: puede usar la expresión <code>{{ $random.int(0, 2) }}</code> para generar un entero aleatorio y mapearlo a un valor).</p>
+</li>
+<li>
+<p>Use un nodo <code>Switch</code> para enrutar las tareas según su <code>priority</code> (tres salidas: "Alta", "Media", "Baja").</p>
 </li>
 <li>
 <p><strong>Para cada rama de prioridad:</strong></p>
 <div class="ulist">
 <ul>
 <li>
-<p>Use otro nodo <code>Switch</code> anidado para enrutar la tarea según su <code>type</code>.</p>
+<p>Use otro nodo <code>Switch</code> anidado para enrutar la tarea según su <code>type</code> (tres salidas: "Técnico", "Marketing", "Administrativo").</p>
 </li>
 <li>
-<p>Escriba la tarea en una hoja de cálculo específica. Por ejemplo, una tarea de prioridad "Alta" y tipo "Técnico" iría a una hoja llamada "Tareas_Tecnicas_Alta". Deberá crear varias hojas para las combinaciones.</p>
+<p>Escriba la tarea en una hoja de cálculo específica. Por ejemplo, una tarea de prioridad "Alta" y tipo "Técnico" iría a una hoja llamada "Tareas_Tecnicas_Alta". Deberá crear las 9 hojas correspondientes a las combinaciones.</p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p>Use un nodo <code>Merge</code> para unir todas las ramas finales.</p>
+<p>Use un nodo <code>Merge</code> en modo <code>Append</code> para unir todas las ramas finales.</p>
 </li>
 <li>
-<p>Después del <code>Merge</code>, use un único nodo <code>Google Sheets</code> para añadir una entrada a una hoja de log llamada "Registro_General" que contenga la <code>activity</code>, <code>priority</code>, <code>type</code> y la <code>hora_asignacion</code>.</p>
+<p>Después del <code>Merge</code>, use un único nodo <code>Google Sheets</code> para añadir una entrada a una hoja de log llamada "Registro_General" que contenga la <code>activity</code>, <code>priority</code>, <code>type</code> y la <code>hora_asignacion</code> (use <code>{{ $now }}</code>).</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ejercicio_4_repositorios_de_github_por_lenguaje_dificultad_media">4.4. Ejercicio 4: Repositorios de GitHub por Lenguaje (Dificultad: Media)</h4>
+<div class="paragraph">
+<p><strong>Objetivo:</strong> Crear un flujo de trabajo que obtenga la lista de repositorios de una organización de GitHub, los clasifique por lenguaje de programación usando un nodo <code>Switch</code> con salida <code>default</code>, y los guarde en hojas separadas de un documento de Google Sheets.</p>
+</div>
+<div class="paragraph">
+<p><strong>API a utilizar:</strong> GitHub API (gratuita, sin clave para uso básico): <code><a href="https://api.github.com/orgs/{org}/repos?per_page=30" class="bare">https://api.github.com/orgs/{org}/repos?per_page=30</a></code> (sustituya <code>{org}</code> por el nombre de una organización, por ejemplo <code>google</code> o <code>microsoft</code>).</p>
+</div>
+<div class="paragraph">
+<p><strong>Requisitos:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>El flujo de trabajo debe iniciarse con un <code>Manual Trigger</code>.</p>
+</li>
+<li>
+<p>Use un <code>HTTP Request</code> para obtener los repositorios de la organización elegida.</p>
+</li>
+<li>
+<p>Use un <code>Split Out</code> sobre el array de repositorios para procesar cada uno individualmente.</p>
+</li>
+<li>
+<p>Use un nodo <code>Switch</code> en modo <code>Rules</code> con el <strong>Routing Field</strong> <code>{{ $json.language }}</code> para clasificar los repositorios:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Salida 0:</strong> <code>is equal to</code> <code>JavaScript</code></p>
+</li>
+<li>
+<p><strong>Salida 1:</strong> <code>is equal to</code> <code>Python</code></p>
+</li>
+<li>
+<p><strong>Salida 2:</strong> <code>is equal to</code> <code>C++</code></p>
+</li>
+<li>
+<p><strong>Salida <code>default</code>:</strong> para todos los demás lenguajes (incluyendo <code>null</code> si el repositorio no tiene lenguaje definido).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Cree un Google Sheet con cuatro hojas: <code>JavaScript</code>, <code>Python</code>, <code>C++</code> y <code>Otros</code>.</p>
+</li>
+<li>
+<p>Escriba los repositorios en la hoja correspondiente, incluyendo al menos las columnas <code>Nombre</code>, <code>Lenguaje</code>, <code>Estrellas</code> (<code>stargazers_count</code>) y <code>Última Actualización</code> (<code>updated_at</code>).</p>
+</li>
+<li>
+<p><strong>Pregunta de reflexión:</strong> ¿Qué pasaría si la organización no tiene ningún repositorio en Python? ¿Se ejecutaría la rama correspondiente? Investigue cómo se comporta un nodo <code>Switch</code> cuando una de sus salidas no recibe ítems.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ejercicio_5_pronóstico_del_tiempo_con_transformación_de_datos_dificultad_media_alta">4.5. Ejercicio 5: Pronóstico del Tiempo con Transformación de Datos (Dificultad: Media-Alta)</h4>
+<div class="paragraph">
+<p><strong>Objetivo:</strong> Crear un flujo de trabajo que obtenga el pronóstico del tiempo a 5 días, transforme la estructura de datos de la API (arrays paralelos) a un formato procesable, clasifique cada día por tipo de tiempo y guarde el resultado en Google Sheets.</p>
+</div>
+<div class="paragraph">
+<p><strong>API a utilizar:</strong> Open-Meteo (gratuita, sin clave API): <code><a href="https://api.open-meteo.com/v1/forecast?latitude=40.4168&amp;longitude=-3.7038&amp;daily=weather_code,temperature_2m_max&amp;timezone=auto&amp;forecast_days=5" class="bare">https://api.open-meteo.com/v1/forecast?latitude=40.4168&amp;longitude=-3.7038&amp;daily=weather_code,temperature_2m_max&amp;timezone=auto&amp;forecast_days=5</a></code> (coordenadas de Madrid).</p>
+</div>
+<div class="paragraph">
+<p><strong>Requisitos:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>El flujo de trabajo debe iniciarse con un <code>Manual Trigger</code>.</p>
+</li>
+<li>
+<p>Use un <code>HTTP Request</code> para obtener el pronóstico. Observe que la respuesta contiene un objeto <code>daily</code> con <strong>arrays paralelos</strong> (<code>time</code>, <code>weather_code</code>, <code>temperature_2m_max</code>), no un array de objetos.</p>
+</li>
+<li>
+<p>Añada un nodo <code>Code</code> (tipo JavaScript) que transforme los arrays paralelos en un array de objetos, uno por día. Cada objeto debe tener las propiedades <code>fecha</code>, <code>codigo</code> y <code>temp_max</code>. (Pista: use un bucle <code>for</code> sobre el índice del array <code>time</code> y construya un objeto con <code>daily.time[i]</code>, <code>daily.weather_code[i]</code> y <code>daily.temperature_2m_max[i]</code>).</p>
+</li>
+<li>
+<p>Use un <code>Split Out</code> sobre el array de objetos generado por el nodo <code>Code</code>.</p>
+</li>
+<li>
+<p>Use un nodo <code>Switch</code> en modo <code>Rules</code> con el <strong>Routing Field</strong> <code>{{ $json.codigo }}</code> para clasificar cada día:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Salida 0 ("Despejado"):</strong> <code>is less than or equal to</code> <code>1</code></p>
+</li>
+<li>
+<p><strong>Salida 1 ("Nublado"):</strong> <code>is greater than</code> <code>1</code> y <code>is less than or equal to</code> <code>3</code> (dos condiciones con <code>AND</code>)</p>
+</li>
+<li>
+<p><strong>Salida 2 ("Lluvia"):</strong> <code>is greater than or equal to</code> <code>51</code> y <code>is less than or equal to</code> <code>67</code> (dos condiciones con <code>AND</code>)</p>
+</li>
+<li>
+<p><strong>Salida <code>default</code>:</strong> para el resto de códigos (nieve, tormentas, etc.).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Cree un Google Sheet con cuatro hojas: <code>Despejado</code>, <code>Nublado</code>, <code>Lluvia</code> y <code>Otro</code>.</p>
+</li>
+<li>
+<p>Escriba cada día en la hoja correspondiente, incluyendo las columnas <code>Fecha</code>, <code>Código WMO</code>, <code>Temperatura Máx (°C)</code> y <code>Categoría</code>.</p>
+</li>
+<li>
+<p><strong>Pregunta de reflexión:</strong> Investigue la tabla de códigos WMO (World Meteorological Organization) y añada una quinta salida al <code>Switch</code> para los días con nieve (códigos 71-77).</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ejercicio_6_combinación_de_datos_por_posición_dificultad_alta">4.6. Ejercicio 6: Combinación de Datos por Posición (Dificultad: Alta)</h4>
+<div class="paragraph">
+<p><strong>Objetivo:</strong> Crear un flujo de trabajo que obtenga datos de dos APIs diferentes en paralelo y los combine posición a posición usando el nodo <code>Merge</code> en modo <code>Combine by Position</code>, para generar un "plan de día" que incluye un chiste y una actividad.</p>
+</div>
+<div class="paragraph">
+<p><strong>APIs a utilizar:</strong>
+. JokeAPI: <code><a href="https://v2.jokeapi.dev/joke/Programming?type=single&amp;amount=5" class="bare">https://v2.jokeapi.dev/joke/Programming?type=single&amp;amount=5</a></code>
+. Bored API: <code><a href="https://bored-api.appbrewery.com/filter?number=5" class="bare">https://bored-api.appbrewery.com/filter?number=5</a></code></p>
+</div>
+<div class="paragraph">
+<p><strong>Requisitos:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>El flujo de trabajo debe iniciarse con un <code>Manual Trigger</code>.</p>
+</li>
+<li>
+<p>Añada <strong>dos</strong> nodos <code>HTTP Request</code> conectados en paralelo al <code>Manual Trigger</code>: uno para la JokeAPI y otro para la Bored API.</p>
+</li>
+<li>
+<p>Añada un <code>Split Out</code> a la salida de cada <code>HTTP Request</code> (campo <code>jokes</code> para la JokeAPI; el array de la Bored API para la otra).</p>
+</li>
+<li>
+<p>Añada un nodo <code>Merge</code> en modo <code>Combine by Position</code> y conecte las salidas de ambos <code>Split Out</code> a las dos entradas del <code>Merge</code>. El primer chiste se combinará con la primera actividad, el segundo con la segunda, y así sucesivamente.</p>
+</li>
+<li>
+<p>Añada un nodo <code>Edit Fields (Set)</code> después del <code>Merge</code> que cree un campo <code>plan</code> combinando el chiste (<code>{{ $json.joke }}</code>) y la actividad (<code>{{ $json.activity }}</code>) en un único texto.</p>
+</li>
+<li>
+<p>Escriba los planes en una hoja de Google Sheets llamada "Planes", con las columnas <code>Chiste</code>, <code>Actividad</code> y <code>Plan</code>.</p>
+</li>
+<li>
+<p><strong>Pregunta de reflexión:</strong> ¿Qué pasaría si una de las APIs devolviera menos de 5 elementos? Investigue cómo se comporta el modo <code>Combine by Position</code> cuando las dos entradas tienen un número diferente de ítems.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_ejercicio_7_informe_diario_de_productos_dificultad_muy_alta">4.7. Ejercicio 7: Informe Diario de Productos (Dificultad: Muy Alta)</h4>
+<div class="paragraph">
+<p><strong>Objetivo:</strong> Crear un flujo de trabajo completo y autónomo que se ejecute una vez al día, obtenga todos los productos de la Fake Store API, los clasifique por rango de precio, los consolide en un único flujo y genere un informe en una sola hoja de Google Sheets. Este ejercicio combina todos los conceptos de la práctica en un único pipeline.</p>
+</div>
+<div class="paragraph">
+<p><strong>API a utilizar:</strong> Fake Store API (<code><a href="https://fakestoreapi.com/products" class="bare">https://fakestoreapi.com/products</a></code>)</p>
+</div>
+<div class="paragraph">
+<p><strong>Requisitos:</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>El flujo de trabajo debe iniciarse con un <code>Schedule Trigger</code> que se ejecute una vez al día (a las 8:00 AM).</p>
+</li>
+<li>
+<p>Use un <code>HTTP Request</code> para obtener todos los productos.</p>
+</li>
+<li>
+<p>Use un <code>Split Out</code> para procesar cada producto individualmente.</p>
+</li>
+<li>
+<p>Use un nodo <code>Switch</code> en modo <code>Rules</code> con el <strong>Routing Field</strong> <code>{{ $json.price }}</code> para clasificar los productos en tres rangos:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Salida 0 ("Económico"):</strong> <code>is less than</code> <code>50</code></p>
+</li>
+<li>
+<p><strong>Salida 1 ("Medio"):</strong> <code>is greater than or equal to</code> <code>50</code> y <code>is less than or equal to</code> <code>200</code> (dos condiciones con <code>AND</code>)</p>
+</li>
+<li>
+<p><strong>Salida 2 ("Premium"):</strong> <code>is greater than</code> <code>200</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>En cada rama, añada un nodo <code>Edit Fields (Set)</code> que cree un campo <code>categoria</code> con el valor correspondiente ("Económico", "Medio" o "Premium").</p>
+</li>
+<li>
+<p>Use un nodo <code>Merge</code> en modo <code>Append</code> para consolidar las tres ramas en un único flujo.</p>
+</li>
+<li>
+<p>Después del <code>Merge</code>, use un único nodo <code>Google Sheets</code> para escribir todos los productos en una hoja llamada "Informe_Diario", incluyendo las columnas <code>ID</code>, <code>Título</code>, <code>Precio</code>, <code>Categoría</code> y <code>Fecha del Informe</code> (use <code>{{ $now }}</code>).</p>
+</li>
+<li>
+<p>Active el flujo de trabajo y verifique que se ejecuta correctamente a la hora programada.</p>
+</li>
+<li>
+<p><strong>Pregunta de reflexión:</strong> ¿Cómo modificaría este flujo para que, en lugar de escribir todos los productos en una sola hoja, escribiera un <strong>resumen</strong> (número de productos por categoría) en una hoja separada? Investigue el nodo <code>Aggregate</code> o el uso de un nodo <code>Code</code> para calcular agregados.</p>
 </li>
 </ol>
 </div>
@@ -1058,7 +1262,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-17 11:46:39 +0200
+Last updated 2026-10-27 09:46:18 +0100
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
