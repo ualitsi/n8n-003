@@ -96,6 +96,7 @@ Este es el paso más complejo, pero solo necesita hacerse una vez. Siga la guía
 . Vaya a la `https://console.cloud.google.com/`.
 . Cree un nuevo proyecto (o use uno existente).
 . Habilite la *Google Sheets API* para ese proyecto.
+. Habilite la *Google Drive API* para ese proyecto.
 
 [.thumb]
 .Google Sheets API
